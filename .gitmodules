@@ -18,3 +18,9 @@
 	path = dwarf2json
 	url = https://github.com/tklengyel/dwarf2json
 	ignore = dirty
+[submodule "src/plugins/vmidbg/dbgstub_cxx"]
+	path = src/plugins/svmidbg/svmidbg/dbgstub_cxx
+	url = /home/chp/git/vmi/dbgstub_cxx
+[submodule "src/plugins/svmidbg/svmidbg"]
+	path = src/plugins/svmidbg/svmidbg
+	url = https://github.com/chp-io/svmidbg.git

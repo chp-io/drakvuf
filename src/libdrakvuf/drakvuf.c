@@ -798,6 +798,7 @@ int drakvuf_event_fd_remove(drakvuf_t drakvuf, int fd)
     PRINT_DEBUG("drakvuf_event_fd_remove fd=%d\n", fd);
     int i = 0;
     GSList* loop = drakvuf->event_fd_info;
+    if (!loop->data && !loop->next) return 0;
     while (loop)
     {
         fd_info_t fd_info = (fd_info_t) loop->data;

@@ -103,6 +103,7 @@
 #*************************************************************************#
 
 sources =
+plugins_cpp_flags =
 
 ###############################################################################
 
@@ -243,10 +244,32 @@ sources += memdump/crypto.cpp
 sources += memdump/stack_util.cpp
 endif
 
+if PLUGIN_SVMIDBG
+sources += svmidbg/svmidbg/drakvuf/src/dbgstub_user.h
+
+sources += svmidbg/svmidbg/svmidbg/src/svmidbg.cpp
+sources += svmidbg/svmidbg/drakvuf/src/svmidbg.cpp
+
+sources += svmidbg/svmidbg/dbgstub_cxx/src/tcp/server.cpp
+sources += svmidbg/svmidbg/dbgstub_cxx/src/common/utils.cpp
+
+sources += svmidbg/svmidbg/dbgstub_cxx/src/gdb/protocol.cpp
+sources += svmidbg/svmidbg/dbgstub_cxx/src/gdb/packet_breakpoints.cpp
+sources += svmidbg/svmidbg/dbgstub_cxx/src/gdb/packet.cpp
+sources += svmidbg/svmidbg/dbgstub_cxx/src/gdb/packet_read_memory.cpp
+sources += svmidbg/svmidbg/dbgstub_cxx/src/gdb/packet_read_registers.cpp
+sources += svmidbg/svmidbg/dbgstub_cxx/src/gdb/packet_write_memory.cpp
+sources += svmidbg/svmidbg/dbgstub_cxx/src/gdb/packet_write_registers.cpp
+
+plugins_cpp_flags += -I$(srcdir)/svmidbg/svmidbg/svmidbg/include/
+plugins_cpp_flags += -I$(srcdir)/svmidbg/svmidbg/drakvuf/include/
+plugins_cpp_flags += -I$(srcdir)/svmidbg/svmidbg/dbgstub_cxx/include/
+endif
+
 ###############################################################################
 sources += plugins.cpp plugins.h plugins_ex.cpp plugins_ex.h plugin_utils.cpp plugin_utils.h private.h
 
-AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(srcdir)
+AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(srcdir) $(plugins_cpp_flags)
 AM_CPPFLAGS += $(CPPFLAGS)
 AM_CPPFLAGS += $(VMI_CFLAGS)
 AM_CPPFLAGS += $(GLIB_CFLAGS)

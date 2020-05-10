@@ -231,6 +231,15 @@ static void print_usage()
             "\t                           each entry in a separate line of file\n"
             "\t                           line format: dll_name,function_name,num_of_arguments\n"
 #endif
+#ifdef ENABLE_PLUGIN_SVMIDBG
+            "\t -G <port number>\n"
+            "\t                           The port number the gdb server will listen\n"
+            "\t -P <pid>\n"
+            "\t                           Pid of the process to follow (requires -G).\n"
+            "\t -N <process name>\n"
+            "\t                           Name of the process to follow (requires -G).\n"
+            "\t                           Ignored if the pid was given.\n"
+#endif
             "\t -h, --help                Show this help\n"
             );
 }
@@ -311,9 +320,12 @@ int main(int argc, char** argv)
         {"json-combase", required_argument, NULL, opt_json_combase},
         {"memdump-dir", required_argument, NULL, opt_memdump_dir},
         {"dll-hooks-list", required_argument, NULL, opt_dll_hooks_list},
+        {"svmidbg-port", required_argument, NULL, 'G'},
+        {"svmidbg-pid", required_argument, NULL, 'P'},
+        {"svmidbg-process-name", required_argument, NULL, 'N'},
         {NULL, 0, NULL, 0}
     };
-    const char* opts = "r:d:i:I:e:m:t:D:o:vx:a:f:spT:S:Mc:nblgj:w:W:h";
+    const char* opts = "r:d:i:I:e:m:t:D:o:vx:a:f:spT:S:Mc:nblgj:w:W:hG:P:N:";
 
     while ((c = getopt_long (argc, argv, opts, long_opts, &long_index)) != -1)
         switch (c)
@@ -468,6 +480,17 @@ int main(int argc, char** argv)
                 break;
             case opt_dll_hooks_list:
                 options.dll_hooks_list = optarg;
+                break;
+#endif
+#ifdef ENABLE_PLUGIN_SVMIDBG
+            case 'G':
+                options.svmidbg_port = (uint16_t) atoi(optarg);
+                break;
+            case 'P':
+                options.svmidbg_pid = (vmi_pid_t) atoi(optarg);
+                break;
+            case 'N':
+                options.svmidbg_process_name = optarg;
                 break;
 #endif
             case 'h':
